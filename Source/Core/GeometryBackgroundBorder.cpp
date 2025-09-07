@@ -31,6 +31,7 @@
 #include "../../Include/RmlUi/Core/Math.h"
 #include <algorithm>
 #include <float.h>
+#include <iostream>
 
 namespace Rml {
 
@@ -102,6 +103,7 @@ BorderMetrics GeometryBackgroundBorder::ComputeBorderMetrics(Vector2f outer_posi
 
 void GeometryBackgroundBorder::DrawBackground(const BorderMetrics& metrics, ColourbPremultiplied color)
 {
+	std::cout << "--> Enter DrawBackground. Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	const int offset_vertices = (int)vertices.size();
 
 	for (int corner = 0; corner < 4; corner++)
@@ -113,6 +115,7 @@ void GeometryBackgroundBorder::DrawBackground(const BorderMetrics& metrics, Colo
 
 void GeometryBackgroundBorder::DrawBorder(const BorderMetrics& metrics, EdgeSizes edge_sizes, const ColourbPremultiplied border_colors[4])
 {
+	std::cout << "--> Enter DrawBorder. Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	RMLUI_ASSERT(border_colors);
 
 	const bool draw_edge[4] = {
@@ -190,6 +193,7 @@ void GeometryBackgroundBorder::DrawPoint(Vector2f pos, ColourbPremultiplied colo
 void GeometryBackgroundBorder::DrawArc(Vector2f pos_center, Vector2f r, float a0, float a1, ColourbPremultiplied color0, ColourbPremultiplied color1,
 	int num_points)
 {
+	std::cout << "------> Enter DrawArc (in background). Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	RMLUI_ASSERT(num_points >= 2 && r.x > 0 && r.y > 0);
 
 	const int offset_vertices = (int)vertices.size();
@@ -229,6 +233,7 @@ void GeometryBackgroundBorder::FillBackground(int index_start)
 void GeometryBackgroundBorder::DrawBorderCorner(Corner corner, Vector2f pos_outer, Vector2f pos_inner, Vector2f pos_circle_center, float R,
 	Vector2f r, ColourbPremultiplied color0, ColourbPremultiplied color1)
 {
+	std::cout << "----> Enter DrawBorderCorner. Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	const float a0 = float((int)corner + 2) * 0.5f * Math::RMLUI_PI;
 	const float a1 = float((int)corner + 3) * 0.5f * Math::RMLUI_PI;
 
@@ -248,6 +253,7 @@ void GeometryBackgroundBorder::DrawBorderCorner(Corner corner, Vector2f pos_oute
 
 void GeometryBackgroundBorder::DrawPointPoint(Vector2f pos_outer, Vector2f pos_inner, ColourbPremultiplied color0, ColourbPremultiplied color1)
 {
+	std::cout << "------> Enter DrawPointPoint. Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	const bool different_color = (color0 != color1);
 
 	vertices.reserve((int)vertices.size() + (different_color ? 4 : 2));
@@ -265,6 +271,7 @@ void GeometryBackgroundBorder::DrawPointPoint(Vector2f pos_outer, Vector2f pos_i
 void GeometryBackgroundBorder::DrawArcArc(Vector2f pos_center, float R, Vector2f r, float a0, float a1, ColourbPremultiplied color0,
 	ColourbPremultiplied color1, int num_points)
 {
+	std::cout << "------> Enter DrawArcArc. Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	RMLUI_ASSERT(num_points >= 2 && R > 0 && r.x > 0 && r.y > 0);
 
 	const int num_triangles = 2 * (num_points - 1);
@@ -306,6 +313,7 @@ void GeometryBackgroundBorder::DrawArcArc(Vector2f pos_center, float R, Vector2f
 void GeometryBackgroundBorder::DrawArcPoint(Vector2f pos_center, Vector2f pos_inner, float R, float a0, float a1, ColourbPremultiplied color0,
 	ColourbPremultiplied color1, int num_points)
 {
+	std::cout << "------> Enter DrawArcPoint. Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	RMLUI_ASSERT(R > 0 && num_points >= 2);
 
 	const int offset_vertices = (int)vertices.size();
