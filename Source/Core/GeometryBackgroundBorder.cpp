@@ -216,10 +216,12 @@ void GeometryBackgroundBorder::DrawArc(Vector2f pos_center, Vector2f r, float a0
 void GeometryBackgroundBorder::FillBackground(int index_start)
 {
 	const int num_added_vertices = (int)vertices.size() - index_start;
-	const int offset_indices = (int)indices.size();
-
 	const int num_triangles = (num_added_vertices - 2);
 
+	if (num_triangles <= 0)
+		return;
+
+	const int offset_indices = (int)indices.size();
 	indices.resize(offset_indices + 3 * num_triangles);
 
 	for (int i = 0; i < num_triangles; i++)
