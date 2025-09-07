@@ -289,15 +289,17 @@ void GeometryBackgroundBorder::DrawArcArc(Vector2f pos_center, float R, Vector2f
 		vertices[offset_vertices + 2 * i + 1].colour = color;
 	}
 
-	for (int i = 0; i < num_triangles; i += 2)
+	for (int i = 0; i < num_points - 1; i++)
 	{
-		indices[offset_indices + 3 * i + 0] = offset_vertices + i + 0;
-		indices[offset_indices + 3 * i + 1] = offset_vertices + i + 2;
-		indices[offset_indices + 3 * i + 2] = offset_vertices + i + 1;
+	    const int i_tri = 2 * i;
+	    const int i_vtx = 2 * i;
+	    indices[offset_indices + 3 * i_tri + 0] = offset_vertices + i_vtx + 0;
+	    indices[offset_indices + 3 * i_tri + 1] = offset_vertices + i_vtx + 2;
+	    indices[offset_indices + 3 * i_tri + 2] = offset_vertices + i_vtx + 1;
 
-		indices[offset_indices + 3 * i + 3] = offset_vertices + i + 1;
-		indices[offset_indices + 3 * i + 4] = offset_vertices + i + 2;
-		indices[offset_indices + 3 * i + 5] = offset_vertices + i + 3;
+	    indices[offset_indices + 3 * i_tri + 3] = offset_vertices + i_vtx + 1;
+	    indices[offset_indices + 3 * i_tri + 4] = offset_vertices + i_vtx + 2;
+	    indices[offset_indices + 3 * i_tri + 5] = offset_vertices + i_vtx + 3;
 	}
 }
 
