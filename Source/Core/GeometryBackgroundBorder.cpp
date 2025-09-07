@@ -193,23 +193,21 @@ void GeometryBackgroundBorder::DrawPoint(Vector2f pos, ColourbPremultiplied colo
 void GeometryBackgroundBorder::DrawArc(Vector2f pos_center, Vector2f r, float a0, float a1, ColourbPremultiplied color0, ColourbPremultiplied color1,
 	int num_points)
 {
-	std::cout << "------> Enter DrawArc (in background). Vertices: " << vertices.size() << ", Capacity: " << vertices.capacity() << std::endl;
 	RMLUI_ASSERT(num_points >= 2 && r.x > 0 && r.y > 0);
 
-	const int offset_vertices = (int)vertices.size();
-
-	vertices.resize(offset_vertices + num_points);
+	vertices.reserve(vertices.size() + num_points);
 
 	for (int i = 0; i < num_points; i++)
 	{
 		const float t = float(i) / float(num_points - 1);
-
 		const float a = Math::Lerp(t, a0, a1);
-
 		const Vector2f unit_vector(Math::Cos(a), Math::Sin(a));
 
-		vertices[offset_vertices + i].position = unit_vector * r + pos_center;
-		vertices[offset_vertices + i].colour = Math::RoundedLerp(t, color0, color1);
+		Vertex new_vertex;
+		new_vertex.position = unit_vector * r + pos_center;
+		new_vertex.colour = Math::RoundedLerp(t, color0, color1);
+
+		vertices.push_back(new_vertex);
 	}
 }
 
