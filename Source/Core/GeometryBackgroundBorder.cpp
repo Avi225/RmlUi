@@ -115,8 +115,6 @@ void GeometryBackgroundBorder::DrawBorder(const BorderMetrics& metrics, EdgeSize
 {
 	RMLUI_ASSERT(border_colors);
 
-	const int offset_vertices = (int)vertices.size();
-
 	const bool draw_edge[4] = {
 		edge_sizes[TOP] > 0 && border_colors[TOP].alpha > 0,
 		edge_sizes[RIGHT] > 0 && border_colors[RIGHT].alpha > 0,
@@ -131,24 +129,34 @@ void GeometryBackgroundBorder::DrawBorder(const BorderMetrics& metrics, EdgeSize
 		draw_edge[BOTTOM] || draw_edge[LEFT],
 	};
 
+	int corner_vertex_start_indices[4] = {};
+
 	for (int corner = 0; corner < 4; corner++)
 	{
-		const Edge edge0 = Edge((corner + 3) % 4);
-		const Edge edge1 = Edge(corner);
+		corner_vertex_start_indices[corner] = (int)vertices.size();
 
 		if (draw_corner[corner])
 		{
+			const Edge edge0 = Edge((corner + 3) % 4);
+			const Edge edge1 = Edge(corner);
 			DrawBorderCorner(Corner(corner), metrics.positions_outer[corner], metrics.positions_inner[corner],
 				metrics.positions_circle_center[corner], metrics.outer_radii[corner], metrics.inner_radii[corner], border_colors[edge0],
 				border_colors[edge1]);
 		}
+	}
 
-		if (draw_edge[edge1])
+	for (int corner = 0; corner < 4; corner++)
+	{
+		const Edge edge = Edge(corner);
+		if (draw_edge[edge])
 		{
-			RMLUI_ASSERTMSG(draw_corner[corner] && draw_corner[(corner + 1) % 4],
+			const int next_corner = (corner + 1) % 4;
+			const int index_next_corner = corner_vertex_start_indices[next_corner];
+
+			RMLUI_ASSERTMSG(draw_corner[corner] && draw_corner[next_corner],
 				"Border edges can only be drawn if both of its connected corners are drawn.");
 
-			FillEdge(edge1 == LEFT ? offset_vertices : (int)vertices.size());
+			FillEdge(index_next_corner);
 		}
 	}
 }
